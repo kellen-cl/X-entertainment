@@ -1,0 +1,184 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom styles for react-slick carousel */
+.hero-slider .slick-dots {
+  bottom: 30px;
+}
+
+.hero-slider .slick-dots li button:before {
+  color: white;
+  opacity: 0.5;
+  font-size: 10px;
+}
+
+.hero-slider .slick-dots li.slick-active button:before {
+  opacity: 1;
+  color: white;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ═══════════════════════════════════════════════
+   LISTEN TO MY MIXES — ADD TO index.css
+   ═══════════════════════════════════════════════ */
+
+/* ── Grid layout ─────────────────────────────── */
+.mixes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .mixes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .mixes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Card ─────────────────────────────────────── */
+.mix-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #18181b; /* zinc-900 */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.5rem;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mix-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Platform badge ───────────────────────────── */
+.mix-platform-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a1a1aa; /* zinc-400 */
+  margin-bottom: 0.75rem;
+}
+
+.mix-platform-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Platform accent colours */
+.mix-dot-soundcloud  { background-color: #ff5500; }
+.mix-dot-audiomack   { background-color: #ffa200; }
+.mix-dot-mixcloud    { background-color: #5000ff; }
+.mix-dot-deezer      { background-color: #00c7f2; }
+.mix-dot-hearthis    { background-color: #1ed760; }
+
+/* ── Text ─────────────────────────────────────── */
+.mix-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.mix-description {
+  font-size: 0.9rem;
+  color: #71717a; /* zinc-500 */
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* ── Embedded player ──────────────────────────── */
+.mix-player-wrapper {
+  width: 100%;
+  /* Fixed height fits most platform embeds; adjust per player if needed */
+  height: 166px;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  background-color: #09090b; /* near-black while loading */
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Mixcloud embeds are taller */
+.mix-card:has(.mix-player-wrapper iframe[src*="mixcloud"]) .mix-player-wrapper {
+  height: 120px;
+}
+
+/* Deezer widget needs more height */
+.mix-card:has(.mix-player-wrapper iframe[src*="deezer"]) .mix-player-wrapper {
+  height: 200px;
+}
+
+.mix-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ── Download / Link button ───────────────────── */
+.mix-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;          /* pushes button to bottom of the card */
+  padding: 0.65rem 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.mix-download-btn:hover {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
+  transform: scale(1.03);
+}
+
+/* ═══════════════════════════════════════════════
+   END MIXES STYLES
+   ═══════════════════════════════════════════════ */
