@@ -13,16 +13,37 @@ export function Contact() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real application, this would send data to a backend
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: "", email: "", phone: "", eventType: "", message: "" });
-    }, 3000);
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
+  try {
+    const response = await fetch("https://formspree.io/f/mjgjpqzk", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      setIsSubmitted(true);
+      // Optional: Reset form data if they want to send another message
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        eventType: "",
+        message: "",
+      });
+    } else {
+      alert("Oops! There was a problem submitting your form. Please try again.");
+    }
+  } catch (error) {
+    alert("Network error. Please check your connection.");
+  }
+};
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -179,119 +200,111 @@ export function Contact() {
 
             {/* Contact Form */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="bg-zinc-900 p-8 border border-white/5">
-                <h2 className="text-3xl font-bold mb-6 tracking-tight">Send Us a Message</h2>
+  initial={{ opacity: 0, x: 20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6 }}
+>
+  <div className="bg-zinc-900 p-8 border border-white/5">
+    <h2 className="text-3xl font-bold mb-6 tracking-tight">Send Us a Message</h2>
 
-                {isSubmitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white text-black p-6 text-center"
-                  >
-                    <h3 className="text-xl font-semibold mb-2">Thank You!</h3>
-                    <p>Your message has been sent. We'll get back to you soon.</p>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
-                        placeholder="Your full name"
-                      />
-                    </div>
+    {isSubmitted ? (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white text-black p-6 text-center"
+      >
+        <h3 className="text-xl font-semibold mb-2">Thank You!</h3>
+        <p>Your message has been sent. We'll get back to you soon.</p>
+      </motion.div>
+    ) : (
+      /* Formspree works best when the <form> handles the onSubmit via the function above */
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium mb-2">Name *</label>
+          <input
+            type="text"
+            id="name"
+            name="name" // This is what shows up in the email label
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
+            placeholder="Your full name"
+          />
+        </div>
 
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium mb-2">Email *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
+            placeholder="your.email@example.com"
+          />
+        </div>
 
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
-                        placeholder="Your phone number"
-                      />
-                    </div>
+        <div>
+          <label htmlFor="phone" className="block text-sm font-medium mb-2">Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
+            placeholder="Your phone number"
+          />
+        </div>
 
-                    <div>
-                      <label htmlFor="eventType" className="block text-sm font-medium mb-2">
-                        Event Type *
-                      </label>
-                      <select
-                        id="eventType"
-                        name="eventType"
-                        value={formData.eventType}
-                        onChange={handleChange}
-                        required
-                        className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
-                      >
-                        <option value="">Select event type</option>
-                        <option value="wedding">Wedding</option>
-                        <option value="corporate">Corporate Event</option>
-                        <option value="club">Club Performance</option>
-                        <option value="private">Private Party</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
+        <div>
+          <label htmlFor="eventType" className="block text-sm font-medium mb-2">Event Type *</label>
+          <select
+            id="eventType"
+            name="eventType"
+            value={formData.eventType}
+            onChange={handleChange}
+            required
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
+          >
+            <option value="">Select event type</option>
+            <option value="wedding">Wedding</option>
+            <option value="corporate">Corporate Event</option>
+            <option value="club">Club Performance</option>
+            <option value="private">Private Party</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
 
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium mb-2">
-                        Message *
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        rows={5}
-                        className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors resize-none"
-                        placeholder="Tell us about your event..."
-                      />
-                    </div>
+        <div>
+          <label htmlFor="message" className="block text-sm font-medium mb-2">Message *</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            required
+            rows={5}
+            className="w-full bg-black border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors resize-none"
+            placeholder="Tell us about your event..."
+          />
+        </div>
 
-                    <button
-                      type="submit"
-                      className="w-full bg-white text-black px-6 py-4 font-semibold tracking-wide hover:bg-gray-200 transition-all hover:scale-105 flex items-center justify-center group"
-                    >
-                      SEND MESSAGE
-                      <Send className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </form>
-                )}
-              </div>
-            </motion.div>
+        <button
+          type="submit"
+          className="w-full bg-white text-black px-6 py-4 font-semibold tracking-wide hover:bg-gray-200 transition-all hover:scale-105 flex items-center justify-center group"
+        >
+          SEND MESSAGE
+          <Send className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        </button>
+      </form>
+    )}
+  </div>
+</motion.div>
+            
           </div>
         </div>
       </section>
